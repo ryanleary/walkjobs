@@ -25,7 +25,7 @@ class LocalScheduler(object):
 
     def check_valid(self):
         if not self._dag.is_valid():
-            raise KeyError("Workflow is not acyclic")
+            raise InvalidPipelineException("Pipeline contains a cycle.")
 
     def get_state(self):
         count = Counter(job.get_state() for job in self._dag.nodes_iter())
@@ -54,9 +54,8 @@ class LocalScheduler(object):
         parents = [self._inst_map[x].is_complete() for x in job.requires() or []]
         return all(parents)
 
-    def get_start_jobs(self):
-        return self._dag.get_sources()
-
+class InvalidPipelineException(Exception):
+    pass
 
 def _count_completed_and_failed_jobs(count):
     return count[JobState.DONE] + count[JobState.FAILED]
