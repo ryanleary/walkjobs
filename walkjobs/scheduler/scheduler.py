@@ -1,11 +1,15 @@
 from walkjobs.graph import DAG
 from job import JobState
 from collections import Counter
+import logging
 import time
+
+logger = logging.getLogger(__name__)
 
 
 class LocalScheduler(object):
     def __init__(self):
+        logger.debug("Initializing LocalScheduler")
         self._dag = DAG()
         self._inst_map = {}
 
@@ -17,6 +21,7 @@ class LocalScheduler(object):
 
     def add_job(self, cls):
         inst = self._get_class_instance(cls)
+        logger.debug("Registering class " + str(inst))
         dependencies = inst.requires() or []
         self._dag.add_node(inst)
         for dep_class in dependencies:
@@ -35,7 +40,7 @@ class LocalScheduler(object):
         sorted_nodes = self._dag.get_topological_sort()
 
         count = self.get_state()
-        while not self._finished(count):
+        while not self._pipeline_finished(count):
             for job in sorted_nodes:
                 if job.is_complete():
                     sorted_nodes.remove(job)
@@ -44,9 +49,9 @@ class LocalScheduler(object):
 
             time.sleep(1)
             count = self.get_state()
-            print(count)
+            logger.info(count)
 
-    def _finished(self, count):
+    def _pipeline_finished(self, count):
         total_jobs = self._dag.number_of_nodes()
         return total_jobs == count[JobState.DONE] or count[JobState.FAILED] > 0
 
@@ -54,8 +59,10 @@ class LocalScheduler(object):
         parents = [self._inst_map[x].is_complete() for x in job.requires() or []]
         return all(parents)
 
+
 class InvalidPipelineException(Exception):
     pass
+
 
 def _count_completed_and_failed_jobs(count):
     return count[JobState.DONE] + count[JobState.FAILED]

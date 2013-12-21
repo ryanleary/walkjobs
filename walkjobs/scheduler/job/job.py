@@ -1,3 +1,7 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class RegisteredJob(type):
     _registry = {}
@@ -26,6 +30,7 @@ class Job(object):
         pass
 
     def execute(self):
+        logger.debug("Executing " + str(self))
         self._state = JobState.RUNNING
         self.run()
         self._state = JobState.DONE
