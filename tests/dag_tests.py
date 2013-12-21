@@ -1,5 +1,4 @@
 import unittest
-
 from walkjobs.graph import DAG
 
 
@@ -16,21 +15,21 @@ class DAGTestCases(unittest.TestCase):
         assert (not self.invalid_graph.is_valid())
 
     def test_valid_dag_get_sources_a(self):
-        assert (self.graph_a.get_sources() == set(['B']))
+        assert (self.graph_a.get_sources() == {'B'})
 
     def test_valid_dag_get_sources_b(self):
-        assert (self.graph_b.get_sources() == set(['B', 'C']))
+        assert (self.graph_b.get_sources() == {'B', 'C'})
 
     def test_valid_dag_get_ancestors(self):
-        assert (self.graph_a.get_ancestors('A') == set(['B']))
-        assert (self.graph_a.get_ancestors('B') == set([]))
-        assert (self.graph_a.get_ancestors('C') == set(['A', 'B', 'D']))
-        assert (self.graph_a.get_ancestors('D') == set(['B']))
-        assert (self.graph_a.get_ancestors('E') == set(['C', 'A', 'B', 'D']))
-        assert (self.graph_a.get_ancestors('F') == set(['C', 'A', 'B', 'D']))
+        assert (self.graph_a.get_ancestors('A') == {'B'})
+        assert (self.graph_a.get_ancestors('B') == set())
+        assert (self.graph_a.get_ancestors('C') == {'A', 'B', 'D'})
+        assert (self.graph_a.get_ancestors('D') == {'B'})
+        assert (self.graph_a.get_ancestors('E') == {'C', 'A', 'B', 'D'})
+        assert (self.graph_a.get_ancestors('F') == {'C', 'A', 'B', 'D'})
 
     def test_valid_dag_get_descendants(self):
-        assert (self.graph_a.get_descendants('A') == set(['C', 'F', 'E']))
+        assert (self.graph_a.get_descendants('A') == {'C', 'F', 'E'})
 
 
 def generate_graph_a():

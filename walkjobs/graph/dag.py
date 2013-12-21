@@ -19,3 +19,6 @@ class DAG(nx.DiGraph):
 
     def is_valid(self):
         return nx.is_directed_acyclic_graph(self)
+
+    def get_topological_sort(self):
+        return nx.topological_sort(self)
