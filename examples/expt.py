@@ -25,7 +25,7 @@ class JobThree(walkjobs.Job):
         print "job3"
 
 
-class JobFourA(walkjobs.Job):
+class JobFourA(walkjobs.SgeJob):
     def requires(self):
         return [JobThree]
 

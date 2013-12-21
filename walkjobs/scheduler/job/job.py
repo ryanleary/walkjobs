@@ -8,7 +8,7 @@ class RegisteredJob(type):
 
     def __new__(mcs, name, bases, attrs):
         cls = super(mcs, RegisteredJob).__new__(mcs, name, bases, attrs)
-        if name != 'Job':
+        if name not in {'Job', 'SgeJob'}:
             mcs._registry[name] = cls
         return cls
 
