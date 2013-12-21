@@ -1,5 +1,5 @@
 import walkjobs
-import logging
+import os
 
 class SimulJobOne(walkjobs.Job):
     def requires(self):
@@ -42,4 +42,4 @@ class JobFourB(walkjobs.Job):
 
 
 if __name__ == "__main__":
-    walkjobs.run(debug=True)
+    walkjobs.run(verbosity=5)

@@ -22,19 +22,28 @@ class Walkjobs(object):
 
 
     @classmethod
-    def run(cls, debug=None):
-        if debug:
-            enable_debug()
+    def run(cls, verbosity=0, log_target=None):
+        configure_logging(verbosity, log_target)
         wj = Walkjobs()
         wj.start_execution()
 
 
-def enable_debug():
+def configure_logging(verbosity=0, log_target=None):
+    def get_level(v):
+        return {0: logging.NOTSET,
+                1: logging.CRITICAL,
+                2: logging.ERROR,
+                3: logging.WARNING,
+                4: logging.INFO,
+                5: logging.DEBUG}\
+            .get(v, logging.NOTSET)
     # create logger
     lgr = logging.getLogger('walkjobs')
-    lgr.setLevel(logging.DEBUG)
+    lgr.setLevel(get_level(verbosity))
     # add a file handler
     fh = logging.StreamHandler()
+    if log_target:
+        fh = logging.StreamHandler(log_target)
     fh.setLevel(logging.DEBUG)
     # create a formatter and set the formatter for the handler.
     frmt = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
