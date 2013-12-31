@@ -1,6 +1,7 @@
 import walkjobs
 import os
 
+
 class SimulJobOne(walkjobs.Job):
     def requires(self):
         pass
