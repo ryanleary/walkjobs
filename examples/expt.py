@@ -43,4 +43,4 @@ class JobFourB(walkjobs.Job):
 
 
 if __name__ == "__main__":
-    walkjobs.run(verbosity=5)
+    walkjobs.run()

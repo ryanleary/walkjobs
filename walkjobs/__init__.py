@@ -1,4 +1,5 @@
 from scheduler.job import Job, SgeJob
-from walkjobs import Walkjobs
+import walkjobs
+import interface
 
-run = Walkjobs.Walkjobs.run
+run = interface.run

@@ -1,7 +1,7 @@
 walkjobs
 ========
 
-A runjobs replacement.
+A python job scheduler for grid engine.
 
 ### Dependencies
 Currently requires:
