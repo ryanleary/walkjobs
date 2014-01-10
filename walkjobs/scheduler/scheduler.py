@@ -1,21 +1,24 @@
-from walkjobs.graph import DAG
-from job import JobState
 from collections import Counter
 import logging
 import time
+
+from walkjobs.graph import DAG
+from walkjobs.job import JobState
+
 
 logger = logging.getLogger(__name__)
 
 
 class LocalScheduler(object):
-    def __init__(self):
+    def __init__(self, executor):
         logger.debug("Initializing LocalScheduler")
         self._dag = DAG()
         self._inst_map = {}
+        self._executor = executor
 
     def _get_class_instance(self, cls):
         if cls not in self._inst_map:
-            self._inst_map[cls] = cls()
+            self._inst_map[cls] = cls(self._executor)
         inst = self._inst_map[cls]
         return inst
 
@@ -38,6 +41,7 @@ class LocalScheduler(object):
 
     def execute(self):
         sorted_nodes = self._dag.get_topological_sort()
+        print sorted_nodes
 
         count = self.get_state()
         while not self._pipeline_finished(count):
@@ -45,7 +49,8 @@ class LocalScheduler(object):
                 if job.is_complete():
                     sorted_nodes.remove(job)
                 elif self._check_reqs_sat(job):
-                    job.execute()
+                    if job.get_state() not in {JobState.RUNNING, JobState.FAILED}:
+                        job.execute()
 
             time.sleep(1)
             count = self.get_state()

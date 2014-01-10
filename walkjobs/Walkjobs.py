@@ -1,32 +1,36 @@
-from scheduler import scheduler
-from scheduler.job import RegisteredJob
 import logging
 import argparse
+
+from scheduler import scheduler
+from execution import LocalExecutionStrategy
+from job import RegisteredJob
+
 
 logger = logging.getLogger(__name__)
 
 
 class Walkjobs(object):
 
-    def __init__(self):
+    def __init__(self, executor):
         logger.debug("Initializing Walkjobs")
-        self._scheduler = scheduler.LocalScheduler()
+        self._scheduler = scheduler.LocalScheduler(executor)
         self._jobs = RegisteredJob.get_registry()
+        self._executor = executor
 
         for cls in self._jobs.itervalues():
             self._scheduler.add_job(cls)
 
     def start_execution(self):
-        logger.debug("Validating pipeline")
+        logger.info("Validating pipeline")
         self._scheduler.check_valid()
-        logger.debug("Executing pipeline")
+        logger.info("Executing pipeline")
         self._scheduler.execute()
 
 
     @classmethod
-    def run(cls, verbosity=0, log_target=None):
+    def run(cls, verbosity=0, log_target=None, executor=LocalExecutionStrategy):
         configure_logging(verbosity, log_target)
-        wj = Walkjobs()
+        wj = Walkjobs(executor)
         wj.start_execution()
 
 
