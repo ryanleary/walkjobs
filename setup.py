@@ -8,5 +8,5 @@ setup(name='walkjobs',
       author='Ryan Leary',
       author_email='ryan@bbn.com',
       packages=['walkjobs', 'walkjobs.graph', 'walkjobs.scheduler', 'walkjobs.job', 'walkjobs.execution'],
-      install_requires=['networkx'],
+      install_requires=['networkx', 'drmaa'],
       extras_require = {'grid_engine': ["drmaa"]})

@@ -1,6 +1,6 @@
 import walkjobs
 from walkjobs.execution import LocalExecutionStrategy
-from external_programs import *
+from external_programs import ExternalAdder, Sleeper
 
 
 class AddJobOne(walkjobs.Job):
